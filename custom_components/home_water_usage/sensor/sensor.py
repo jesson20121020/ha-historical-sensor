@@ -225,82 +225,14 @@ async def async_setup_entry(
 async def _create_input_entities(hass: HomeAssistant, config_entry: ConfigEntry):
     """Create input_number entities using HA services."""
     try:
-        # Create water usage input
-        await hass.services.async_call(
-            "input_number",
-            "create",
-            {
-                "obj_id": f"{DOMAIN}_usage",
-                "name": f"{NAME} - Monthly Usage",
-                "min": 0,
-                "max": 1000,
-                "step": 0.1,
-                "unit_of_measurement": "m³",
-                "mode": "box",
-                "editable": True,
-            }
-        )
+        # Note: input_number.create service may not exist in all HA versions
+        # We'll provide instructions for manual creation instead
+        LOGGER.info("Input entities should be created manually in HA configuration")
 
-        # Create year-month input
-        current_year = datetime.now().year
-        await hass.services.async_call(
-            "input_number",
-            "create",
-            {
-                "obj_id": f"{DOMAIN}_year_month",
-                "name": f"{NAME} - Year-Month",
-                "min": 202001,
-                "max": (current_year + 1) * 100 + 12,
-                "step": 1,
-                "mode": "box",
-                "editable": True,
-            }
-        )
-
-        # Set up automation to handle input changes
-        await _setup_input_automation(hass, config_entry)
+        # Log instructions for user
+        LOGGER.info("Please create the following input_number entities in your HA configuration:")
+        LOGGER.info("1. input_number.home_water_usage_usage (min: 0, max: 1000, step: 0.1)")
+        LOGGER.info("2. input_number.home_water_usage_year_month (min: 202001, max: 202512, step: 1)")
 
     except Exception as e:
         LOGGER.error(f"Failed to create input entities: {e}")
-
-
-async def _setup_input_automation(hass: HomeAssistant, config_entry: ConfigEntry):
-    """Set up automation to handle input number changes."""
-    automation_config = {
-        "alias": f"{NAME} - Data Input Handler",
-        "trigger": [
-            {
-                "platform": "state",
-                "entity_id": f"input_number.{DOMAIN}_year_month"
-            }
-        ],
-        "condition": [
-            {
-                "condition": "and",
-                "conditions": [
-                    {
-                        "condition": "template",
-                        "value_template": "{{ states('input_number.home_water_usage_year_month') | int > 0 }}"
-                    },
-                    {
-                        "condition": "template",
-                        "value_template": "{{ states('input_number.home_water_usage_usage') | float > 0 }}"
-                    }
-                ]
-            }
-        ],
-        "action": [
-            {
-                "service": f"{DOMAIN}.add_water_usage",
-                "data": {
-                    "year_month": "{{ states('input_number.home_water_usage_year_month') }}",
-                    "usage": "{{ states('input_number.home_water_usage_usage') }}"
-                }
-            }
-        ]
-    }
-
-    try:
-        await hass.services.async_call("automation", "create", automation_config)
-    except Exception as e:
-        LOGGER.error(f"Failed to create automation: {e}")

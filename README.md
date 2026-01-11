@@ -37,18 +37,58 @@ After installation, add the "Home Water Usage" integration through the Home Assi
 
 ## Usage
 
+### Setup Input Entities
+
+First, create the following input entities in your HA configuration (via YAML or UI):
+
+#### Option 1: Via YAML (configuration.yaml)
+```yaml
+input_number:
+  home_water_usage_usage:
+    name: "Home Water Usage - Monthly Usage"
+    min: 0
+    max: 1000
+    step: 0.1
+    unit_of_measurement: "m³"
+    mode: box
+
+  home_water_usage_year_month:
+    name: "Home Water Usage - Year-Month"
+    min: 202001
+    max: 202512
+    step: 1
+    mode: box
+```
+
+#### Option 2: Via HA UI
+1. Go to Settings > Devices & Services > Helpers
+2. Click "Add Helper" > "Number"
+3. Create two number helpers with the specifications above
+
+### Using the Integration
+
 1. The integration creates:
-   - A sensor entity that provides historical water usage statistics
-   - Two input number entities for data entry:
-     - "Home Water Usage - Monthly Usage": Enter the water usage in cubic meters
-     - "Home Water Usage - Year-Month": Enter the year and month in YYYYMM format (e.g., 202401 for January 2024)
+   - `sensor.home_water_usage`: Historical water usage statistics sensor
 
 2. To add water usage data:
-   - Set the monthly usage value in the "Monthly Usage" input
-   - Set the year-month in the "Year-Month" input
-   - The data will be automatically saved and statistics updated
+   - Set the monthly usage value in `input_number.home_water_usage_usage`
+   - Set the year-month in `input_number.home_water_usage_year_month` (format: YYYYMM)
+   - Use the service `home_water_usage.add_water_usage` with parameters:
+     - `year_month`: Year-month string (e.g., "2024-01")
+     - `usage`: Water usage in cubic meters
 
 3. The sensor will appear in the Energy dashboard under water consumption
+
+### Service Usage
+
+You can also add data programmatically using the service:
+
+```yaml
+service: home_water_usage.add_water_usage
+data:
+  year_month: "2024-01"
+  usage: 25.5
+```
 
 ## Requirements
 

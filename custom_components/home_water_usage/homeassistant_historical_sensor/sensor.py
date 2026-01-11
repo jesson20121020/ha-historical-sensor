@@ -125,7 +125,7 @@ class HistoricalSensor(SensorEntity):
         """
 
         if not self.historical_states:
-            LOGGER.warning(f"{self.entity_id}: no historical states available")
+            LOGGER.debug(f"{self.entity_id}: no historical states available yet")
             return
 
         LOGGER.debug(
