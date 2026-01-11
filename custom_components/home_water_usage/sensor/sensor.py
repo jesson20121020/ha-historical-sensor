@@ -128,18 +128,19 @@ class WaterUsageInput(InputNumber):
     """Input number for water usage entry."""
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry):
-        super().__init__()
+        config = {
+            "name": f"{NAME} - Monthly Usage",
+            "min": 0,
+            "max": 1000,
+            "step": 0.1,
+            "unit_of_measurement": "m³",
+            "mode": "box",
+            "unique_id": f"input_number.{DOMAIN}_usage",
+        }
+        super().__init__(config)
         self.hass = hass
         self.config_entry = config_entry
         self._sensor = None
-
-        self._attr_name = f"{NAME} - Monthly Usage"
-        self._attr_unique_id = f"input_number.{DOMAIN}_usage"
-        self._attr_native_min_value = 0
-        self._attr_native_max_value = 1000
-        self._attr_native_step = 0.1
-        self._attr_native_unit_of_measurement = "m³"
-        self._attr_mode = "box"
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
@@ -151,19 +152,20 @@ class YearMonthInput(InputNumber):
     """Input number for year-month selection."""
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry):
-        super().__init__()
         current_year = datetime.now().year
+        config = {
+            "name": f"{NAME} - Year-Month",
+            "min": 202001,  # 2020-01
+            "max": (current_year + 1) * 100 + 12,  # Next year December
+            "step": 1,
+            "mode": "box",
+            "unique_id": f"input_number.{DOMAIN}_year_month",
+        }
+        super().__init__(config)
         self.hass = hass
         self.config_entry = config_entry
         self._sensor = None
         self._usage_input = None
-
-        self._attr_name = f"{NAME} - Year-Month"
-        self._attr_unique_id = f"input_number.{DOMAIN}_year_month"
-        self._attr_native_min_value = 202001  # 2020-01
-        self._attr_native_max_value = (current_year + 1) * 100 + 12  # Next year December
-        self._attr_native_step = 1
-        self._attr_mode = "box"
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
