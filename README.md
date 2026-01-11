@@ -67,17 +67,19 @@ input_number:
 
 ### Using the Integration
 
-1. The integration creates:
-   - `sensor.home_water_usage`: Historical water usage statistics sensor
+1. **Automatic Sample Data**: The integration automatically generates 12 months of sample water usage data (15-35 m³ per month) for testing purposes.
 
-2. To add water usage data:
+2. The integration creates:
+   - `sensor.home_water_usage`: Historical water usage statistics sensor with sample data
+
+3. **Optional Manual Data Entry** (after setting up input entities):
    - Set the monthly usage value in `input_number.home_water_usage_usage`
    - Set the year-month in `input_number.home_water_usage_year_month` (format: YYYYMM)
-   - Use the service `home_water_usage.add_water_usage` with parameters:
+   - Or use the service `home_water_usage.add_water_usage` with parameters:
      - `year_month`: Year-month string (e.g., "2024-01")
      - `usage`: Water usage in cubic meters
 
-3. The sensor will appear in the Energy dashboard under water consumption
+4. The sensor will appear in the Energy dashboard under water consumption with historical data visible immediately.
 
 ### Service Usage
 
