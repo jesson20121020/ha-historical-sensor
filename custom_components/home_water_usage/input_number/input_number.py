@@ -6,7 +6,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 
-from .const import DOMAIN, NAME
+from ..const import DOMAIN, NAME
 
 
 class WaterUsageInput(InputNumber):
