@@ -1,0 +1,8 @@
+{
+  "name": "Historical Sensors for Home Assistant",
+  "country": false,
+  "render_readme": true,
+  "zip_release": true,
+  "filename": "master.zip",
+  "homeassistant": "2025.12.0"
+}
