@@ -70,9 +70,10 @@ class WaterUsageSensor(PollUpdateMixin, HistoricalSensor, SensorEntity):
         self.hass.async_create_task(self._save_data())
 
     async def async_update_historical(self) -> None:
-        """Update historical states from stored data."""
+        """Update historical states from stored data or generate sample data."""
         historical_states = []
 
+        # First, add any manually entered data
         for year_month, usage in self._data.items():
             try:
                 # Parse year_month (format: "2024-01")
@@ -92,6 +93,37 @@ class WaterUsageSensor(PollUpdateMixin, HistoricalSensor, SensorEntity):
                 )
             except ValueError:
                 LOGGER.warning(f"Invalid year_month format: {year_month}")
+
+        # If no manual data, generate sample data for the last 12 months
+        if not historical_states:
+            import random
+            current_date = datetime.now()
+
+            for i in range(12):
+                # Go back i months
+                target_date = current_date - timedelta(days=30 * i)
+
+                # Create end of month timestamp
+                if target_date.month == 12:
+                    end_of_month = datetime(target_date.year + 1, 1, 1) - timedelta(days=1)
+                else:
+                    end_of_month = datetime(target_date.year, target_date.month + 1, 1) - timedelta(days=1)
+
+                timestamp = dtutil.as_utc(end_of_month).timestamp()
+
+                # Generate random usage between 15-35 m³
+                usage = round(random.uniform(15, 35), 1)
+
+                historical_states.append(
+                    HistoricalState(state=usage, timestamp=timestamp)
+                )
+
+                # Store sample data for persistence
+                year_month = "04d"
+                self._data[year_month] = usage
+
+            # Save sample data
+            await self._save_data()
 
         self._attr_historical_states = sorted(historical_states, key=lambda x: x.timestamp)
 
