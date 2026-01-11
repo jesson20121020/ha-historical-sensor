@@ -108,7 +108,17 @@ data:
 
 ### Node-RED Integration
 
-For Node-RED users, create a simple flow to set historical data:
+For Node-RED users, you can use the provided flow example or create a custom flow:
+
+#### Quick Start with Example Flow
+
+1. **Import the flow**: Import `node-red-flow-example.json` into your Node-RED
+2. **Configure the HTTP Request node**:
+   - Update URL to your HA IP: `http://your-ha-ip:8123/api/services/home_water_usage/set_historical_data`
+   - Add your HA token: `Authorization: Bearer YOUR_LONG_LIVED_ACCESS_TOKEN`
+3. **Deploy and test**: Click the inject node to send sample data
+
+#### Custom Flow Setup
 
 1. **HTTP Request Node**:
    - Method: POST
@@ -128,7 +138,10 @@ For Node-RED users, create a simple flow to set historical data:
 }
 ```
 
-3. **Trigger**: Use inject node or schedule to update data periodically
+3. **Trigger Options**:
+   - Inject node for manual updates
+   - Schedule node for periodic updates
+   - MQTT/Webhook triggers for external data sources
 
 This provides a simple way to integrate with external data sources through Node-RED.
 
