@@ -53,7 +53,6 @@ After installation, add the "Home Water Usage" integration through the Home Assi
 ## Requirements
 
 - Home Assistant 2025.12.0 or later
-- `homeassistant-historical-sensor` library
 
 ## Technical Details
 
