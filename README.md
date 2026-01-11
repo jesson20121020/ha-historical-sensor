@@ -1,7 +1,7 @@
 # Home Water Usage Integration
 
 [![GitHub Release](https://img.shields.io/github/release/jesson20121020/ha-historical-sensor.svg)](https://github.com/jesson20121020/ha-historical-sensor/releases)
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 
 Manual water usage tracking integration for Home Assistant with energy dashboard support.
 
