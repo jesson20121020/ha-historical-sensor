@@ -135,6 +135,7 @@ class WaterUsageInput(InputNumber):
             "step": 0.1,
             "unit_of_measurement": "m³",
             "mode": "box",
+            "editable": True,
             "id": f"input_number.{DOMAIN}_usage",
             "unique_id": f"input_number.{DOMAIN}_usage",
         }
@@ -160,6 +161,7 @@ class YearMonthInput(InputNumber):
             "max": (current_year + 1) * 100 + 12,  # Next year December
             "step": 1,
             "mode": "box",
+            "editable": True,
             "id": f"input_number.{DOMAIN}_year_month",
             "unique_id": f"input_number.{DOMAIN}_year_month",
         }
