@@ -83,14 +83,54 @@ input_number:
 
 ### Service Usage
 
-You can also add data programmatically using the service:
+You can add data programmatically using these services:
 
+#### Add Single Data Point
 ```yaml
 service: home_water_usage.add_water_usage
 data:
   year_month: "2024-01"
   usage: 25.5
 ```
+
+#### Set Historical Data (Node-RED Compatible)
+```yaml
+service: home_water_usage.set_historical_data
+data:
+  data_points:
+    - year_month: "2023-12"
+      usage: 22.3
+    - year_month: "2024-01"
+      usage: 18.7
+    - year_month: "2024-02"
+      usage: 31.2
+```
+
+### Node-RED Integration
+
+For Node-RED users, create a simple flow to set historical data:
+
+1. **HTTP Request Node**:
+   - Method: POST
+   - URL: `http://your-ha-ip:8123/api/services/home_water_usage/set_historical_data`
+   - Headers: `Authorization: Bearer YOUR_LONG_LIVED_ACCESS_TOKEN`
+   - Content-Type: `application/json`
+
+2. **Payload Example**:
+```json
+{
+  "data_points": [
+    {"year_month": "2023-12", "usage": 22.3},
+    {"year_month": "2024-01", "usage": 18.7},
+    {"year_month": "2024-02", "usage": 31.2},
+    {"year_month": "2024-03", "usage": 25.8}
+  ]
+}
+```
+
+3. **Trigger**: Use inject node or schedule to update data periodically
+
+This provides a simple way to integrate with external data sources through Node-RED.
 
 ## Requirements
 

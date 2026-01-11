@@ -41,7 +41,35 @@ async def _register_services(hass: HomeAssistant):
                 await sensor.async_write_historical()
                 break
 
+    async def set_historical_data_service(call):
+        """Service to set historical data directly (for Node-RED integration)."""
+        data_points = call.data.get("data_points", [])
+
+        if not data_points:
+            LOGGER.error("No data_points provided")
+            return
+
+        # Find sensor instance
+        for entry_id, entry_data in hass.data[DOMAIN].items():
+            sensor = entry_data.get("sensor")
+            if sensor:
+                # Clear existing data and set new historical data
+                sensor._data.clear()
+
+                for point in data_points:
+                    year_month = point.get("year_month")
+                    usage = point.get("usage")
+                    if year_month and usage is not None:
+                        sensor._data[str(year_month)] = float(usage)
+
+                await sensor._save_data()
+                await sensor.async_update_historical()
+                await sensor.async_write_historical()
+                LOGGER.info(f"Set {len(data_points)} historical data points")
+                break
+
     hass.services.async_register(DOMAIN, "add_water_usage", add_water_usage_service)
+    hass.services.async_register(DOMAIN, "set_historical_data", set_historical_data_service)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
