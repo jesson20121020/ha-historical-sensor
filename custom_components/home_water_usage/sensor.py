@@ -2,7 +2,8 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any
 
-from homeassistant.components.recorder.models import StatisticData, StatisticMetaData, StatisticsRow
+from homeassistant.components.recorder.models import StatisticData, StatisticMetaData
+from homeassistant.components.recorder.statistics import StatisticsRow
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfVolume
